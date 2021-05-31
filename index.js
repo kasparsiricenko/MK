@@ -3,13 +3,13 @@ import express from 'express'
 import { Server as SocketIoServer } from 'socket.io'
 import path from 'path'
 import dotenv from 'dotenv'
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 dotenv.config()
-const port = process.env.PORT
+const port = process.env.PORT || 8765
 const app = express()
 const server = createServer(app)
 const io = new SocketIoServer(server)
