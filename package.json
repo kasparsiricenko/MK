@@ -1,5 +1,5 @@
 {
-  "name": "MK",
+  "name": "mk",
   "description": "Multiplayer server",
   "version": "0.0.1",
   "main": "index.js",
