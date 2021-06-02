@@ -1,6 +1,21 @@
 import createPlayer from './createPlayer.js'
+import Player from './Player.js'
 
 let socket = io()
 
-createPlayer('player1', 'SCORPION', 14)
-createPlayer('player2', 'KITANA', 88)
+const player1 = new Player({
+  name: 'SCORPION',
+  hp: 14,
+  img: './assets/scorpion.gif',
+  weapon: ['vodka'],
+})
+
+const player2 = new Player({
+  name: 'KITANA',
+  hp: 88,
+  img: './assets/kitana.gif',
+  weapon: ['whiskey'],
+})
+
+createPlayer('player1', player1)
+createPlayer('player2', player2)

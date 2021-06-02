@@ -1,13 +1,4 @@
-import Player from './Player.js'
-
-const createPlayer = (playerClass, playerName, playerHp) => {
-  const player = new Player({
-    name: playerName,
-    hp: playerHp,
-    img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
-    weapon: ['vodka'],
-  })
-
+const createPlayer = (playerClass, player) => {
   const playerElement = document.createElement('div')
   playerElement.classList.add(playerClass)
 
