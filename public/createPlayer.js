@@ -23,7 +23,7 @@ const createPlayer = (playerClass, player) => {
 
   characterElement.append(imgElement)
 
-  lifeElement.style.width = '100%'
+  lifeElement.style.width = `${player.hp}%`
   nameElement.append(player.name)
 
   const arenasElement = document.getElementsByClassName('arenas')[0]
