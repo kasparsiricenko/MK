@@ -1,6 +1,6 @@
-const createPlayer = (playerClass, player) => {
+const createPlayer = (player) => {
   const playerElement = document.createElement('div')
-  playerElement.classList.add(playerClass)
+  playerElement.classList.add(`player${player.player}`)
 
   const progressBarElement = document.createElement('div')
   progressBarElement.classList.add('progressbar')
