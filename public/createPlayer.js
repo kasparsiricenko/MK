@@ -1,34 +1,34 @@
 const createPlayer = (player) => {
-  const playerElement = document.createElement('div')
-  playerElement.classList.add(`player${player.player}`)
+  const $player = document.createElement('div')
+  $player.classList.add(`player${player.player}`)
 
-  const progressBarElement = document.createElement('div')
-  progressBarElement.classList.add('progressbar')
+  const $progressBar = document.createElement('div')
+  $progressBar.classList.add('progressbar')
 
-  const characterElement = document.createElement('div')
-  characterElement.classList.add('character')
+  const $character = document.createElement('div')
+  $character.classList.add('character')
 
-  playerElement.append(progressBarElement, characterElement)
+  $player.append($progressBar, $character)
 
-  const lifeElement = document.createElement('div')
-  lifeElement.classList.add('life')
+  const $life = document.createElement('div')
+  $life.classList.add('life')
 
-  const nameElement = document.createElement('div')
-  nameElement.classList.add('name')
+  const $name = document.createElement('div')
+  $name.classList.add('name')
 
-  progressBarElement.append(lifeElement, nameElement)
+  $progressBar.append($life, $name)
 
-  const imgElement = new Image()
-  imgElement.src = player.img
+  const $image = new Image()
+  $image.src = player.img
 
-  characterElement.append(imgElement)
+  $character.append($image)
 
-  lifeElement.style.width = `${player.hp}%`
-  nameElement.append(player.name)
+  $life.style.width = `${player.hp}%`
+  $name.append(player.name)
 
-  const arenasElement = document.getElementsByClassName('arenas')[0]
+  const $arenas = document.getElementsByClassName('arenas')[0]
 
-  arenasElement.append(playerElement)
+  $arenas.append($player)
 }
 
 export default createPlayer

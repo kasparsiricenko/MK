@@ -7,11 +7,11 @@ const changeHP = (player) => {
 
   player.hp = lost ? 0 : newHp
 
-  const playerLifeElement = document.querySelector(
+  const $playerLife = document.querySelector(
     `.player${player.player} > .progressbar > .life`
   )
 
-  playerLifeElement.style.width = `${player.hp}%`
+  $playerLife.style.width = `${player.hp}%`
 
   return lost
 }

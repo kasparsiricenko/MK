@@ -1,20 +1,19 @@
 const setLoseTitle = ({ name, isDraw }) => {
   const title = isDraw ? 'draw' : `${name} lost`
 
-  const currentLoseTitleElement =
-    document.getElementsByClassName('loseTitle')[0]
+  const $currentLoseTitle = document.getElementsByClassName('loseTitle')[0]
 
-  if (currentLoseTitleElement === undefined) {
-    const loseTitleElement = document.createElement('div')
-    loseTitleElement.classList.add('loseTitle')
-    loseTitleElement.append(title)
+  if ($currentLoseTitle === undefined) {
+    const $loseTitle = document.createElement('div')
+    $loseTitle.classList.add('loseTitle')
+    $loseTitle.append(title)
 
-    const arenasElement = document.getElementsByClassName('arenas')[0]
-    arenasElement.prepend(loseTitleElement)
+    const $arenas = document.getElementsByClassName('arenas')[0]
+    $arenas.prepend($loseTitle)
     return
   }
 
-  currentLoseTitleElement.replaceChildren(title)
+  $currentLoseTitle.replaceChildren(title)
 }
 
 export default setLoseTitle

@@ -2,7 +2,7 @@ import setLoseTitle from './setLoseTitle.js'
 import changeHP from './changeHP.js'
 
 const addOnClickRandom = (player1, player2) => {
-  const randomButtonElement = document.getElementsByClassName('button')[0]
+  const $randomButton = document.getElementsByClassName('button')[0]
   const onClick = (e) => {
     e.preventDefault()
 
@@ -17,7 +17,7 @@ const addOnClickRandom = (player1, player2) => {
       return setLoseTitle({ name: player2.name })
     }
   }
-  randomButtonElement.addEventListener('click', onClick)
+  $randomButton.addEventListener('click', onClick)
 }
 
 export default addOnClickRandom
