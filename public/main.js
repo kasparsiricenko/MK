@@ -1,5 +1,5 @@
 import createPlayer from './createPlayer.js'
-import addOnClickRandom from './onClickRandom.js'
+import addOnClickRandom from './addOnClickRandom.js'
 import Player from './Player.js'
 
 let socket = io()
