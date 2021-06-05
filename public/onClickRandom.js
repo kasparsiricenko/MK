@@ -1,4 +1,4 @@
-import setLoseTitle from './setLoseTitle.js'
+import setWinTitle from './setWinTitle.js'
 import changeHP from './changeHP.js'
 
 const addOnClickRandom = (player1, player2) => {
@@ -10,12 +10,16 @@ const addOnClickRandom = (player1, player2) => {
     const lost2 = changeHP(player2)
 
     if (lost1 && lost2) {
-      return setLoseTitle({ isDraw: true })
+      setWinTitle({ isDraw: true })
     } else if (lost1) {
-      return setLoseTitle({ name: player1.name })
+      setWinTitle({ name: player2.name })
     } else if (lost2) {
-      return setLoseTitle({ name: player2.name })
+      setWinTitle({ name: player1.name })
+    } else {
+      // returns to prevent disable random button sinse none player win and game is still going..
+      return
     }
+    $randomButton.disabled = true
   }
   $randomButton.addEventListener('click', onClick)
 }

@@ -261,8 +261,15 @@ body {
 .button:active::after {
     top: 1px;
 }
+.button[disabled] {
+  background: #707070;
+  color: #eeeeee;
+}
+.button[disabled]::after {
+  background: #4d4c4c;
+}
 
-.loseTitle {
+.winTitle {
     position: absolute;
     top: 25%;
     left: 50%;
@@ -273,4 +280,3 @@ body {
     color: white;
     font-family: "Mortal Kombat 3";
 }
-
