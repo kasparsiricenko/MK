@@ -9,15 +9,13 @@ class Player {
   attack() {
     console.log(`${this.name} Fight...`)
   }
-  renderHP(hit) {
-    const newHp = player.hp - hit
-    const lost = newHp <= 0
-    player.hp = lost ? 0 : newHp
-    return lost
+  changeHP(hit) {
+    const newHp = this.hp - hit
+    this.hp = newHp <= 0 ? 0 : newHp
   }
   elHP() {
     return document.querySelector(
-      `.player${player.player} > .progressbar > .life`
+      `.player${this.player} > .progressbar > .life`
     )
   }
   renderHP() {
