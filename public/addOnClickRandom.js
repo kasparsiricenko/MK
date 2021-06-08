@@ -1,13 +1,21 @@
 import setWinTitle from './setWinTitle.js'
-import changeHP from './changeHP.js'
+import { getRandomizedHit } from './utils.js'
+import createReloadButton from './createReloadButton.js'
 
 const addOnClickRandom = (player1, player2) => {
   const $randomButton = document.getElementsByClassName('button')[0]
+
   const onClick = (e) => {
     e.preventDefault()
 
-    const lost1 = changeHP(player1)
-    const lost2 = changeHP(player2)
+    player1.changeHP(getRandomizedHit(20))
+    player2.changeHP(getRandomizedHit(20))
+
+    const lost1 = player1.hp <= 0
+    const lost2 = player2.hp <= 0
+
+    player1.renderHP()
+    player2.renderHP()
 
     if (lost1 && lost2) {
       setWinTitle({ isDraw: true })
@@ -19,8 +27,13 @@ const addOnClickRandom = (player1, player2) => {
       // returns to prevent disable random button sinse none player win and game is still going..
       return
     }
+    const $arenas = document.getElementsByClassName('arenas')[0]
+    const $reloadButton = createReloadButton()
+    $arenas.append($reloadButton)
+
     $randomButton.disabled = true
   }
+
   $randomButton.addEventListener('click', onClick)
 }
 
