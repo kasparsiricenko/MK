@@ -42,6 +42,38 @@ const onSumbit = () => {
 
   const player1Attack = { hit, value, defence }
   const player2Attack = enemyAttack()
+
+  const player1BlockedAttack = player1Attack.defence === player2Attack.hit
+  const player2BlockedAttack = player2Attack.defence === player1Attack.hit
+
+  player1BlockedAttack === false && player1.changeHP(player2Attack.value)
+  player2BlockedAttack === false && player2.changeHP(player1Attack.value)
+
+  const player1Lost = player1.hp <= 0
+  const player2Lost = player2.hp <= 0
+
+  player1.renderHP()
+  player2.renderHP()
+
+  if (lost1 && lost2) {
+    setWinTitle({ isDraw: true })
+  } else if (lost1) {
+    setWinTitle({ name: player2.name })
+  } else if (lost2) {
+    setWinTitle({ name: player1.name })
+  } else {
+    // returns to prevent disable submit button sinse none player win and game is still going..
+    return
+  }
+
+  const $arenas = document.getElementsByClassName('arenas')[0]
+  const $reloadButton = createReloadButton()
+  $arenas.append($reloadButton)
+
+  const $submitButton = document.querySelector(
+    '.control > .buttonWrap > .button'
+  )
+  $submitButton.disabled = true
 }
 
 const $form = document.querySelector('form.control')
@@ -57,5 +89,3 @@ const enemyAttack = () => {
   const defence = ATTACK[getRandom(ATTACK.length)]
   return { hit, value, defence }
 }
-
-addOnClickRandom(player1, player2)
