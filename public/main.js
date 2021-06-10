@@ -1,6 +1,7 @@
 import createPlayer from './createPlayer.js'
 import addOnClickRandom from './addOnClickRandom.js'
 import Player from './Player.js'
+import { getRandomizedHit } from './utils.js'
 
 let socket = io()
 
@@ -36,5 +37,16 @@ const onSumbit = () => {
 
 const $form = document.querySelector('form.control')
 $form.addEventListener('submit', onSumbit)
+
+const getRandom = (max) => {
+  return Math.floor(Math.random() * max)
+}
+
+const enemyAttack = () => {
+  const hit = ATTACK[getRandom(ATTACK.length)]
+  const value = getRandomizedHit(HIT[hitType])
+  const defence = ATTACK[getRandom(ATTACK.length)]
+  return { hit, value, defence }
+}
 
 addOnClickRandom(player1, player2)
