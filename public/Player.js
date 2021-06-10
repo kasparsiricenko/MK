@@ -9,6 +9,18 @@ class Player {
   attack() {
     console.log(`${this.name} Fight...`)
   }
+  changeHP(hit) {
+    const newHp = this.hp - hit
+    this.hp = newHp <= 0 ? 0 : newHp
+  }
+  elHP() {
+    return document.querySelector(
+      `.player${this.player} > .progressbar > .life`
+    )
+  }
+  renderHP() {
+    this.elHP().style.width = `${this.hp}%`
+  }
 }
 
 export default Player
