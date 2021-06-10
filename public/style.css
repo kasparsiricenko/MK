@@ -259,17 +259,17 @@ body {
 .button:disabled {
   opacity: 0.9;
   cursor: not-allowed;
-}
-
-.button:disabled:after {
-  opacity: 0.1;
   background: #707070;
   color: #eeeeee;
 }
 
+.button:disabled:after {
+  opacity: 0.1;
+  background: #4d4c4c;
+}
+
 .button:disabled:active {
   top: 0px;
-  background: #4d4c4c;
 }
 
 .button:disabled:active::after {
