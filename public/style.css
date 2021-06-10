@@ -1,15 +1,15 @@
 @font-face {
   font-family: 'Mortal Kombat 3';
   src: url('./assets/fonts/MortalKombat3-Regular.eot');
-  src: url('./assets/fonts/MortalKombat3-Regular.eot?#iefix') format('embedded-opentype'),
-  url('./assets/fonts/MortalKombat3-Regular.woff2') format('woff2'),
-  url('./assets/fonts/MortalKombat3-Regular.woff') format('woff'),
-  url('./assets/fonts/MortalKombat3-Regular.ttf') format('truetype');
+  src: url('./assets/fonts/MortalKombat3-Regular.eot?#iefix')
+      format('embedded-opentype'),
+    url('./assets/fonts/MortalKombat3-Regular.woff2') format('woff2'),
+    url('./assets/fonts/MortalKombat3-Regular.woff') format('woff'),
+    url('./assets/fonts/MortalKombat3-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
-
 
 *,
 *:before,
@@ -232,11 +232,11 @@ body {
   border-radius: 4px;
   box-sizing: border-box;
   cursor: pointer;
-  font-family: "Mortal Kombat 3";
+  font-family: 'Mortal Kombat 3';
   outline: none;
 }
 .button::after {
-  content: "";
+  content: '';
   position: absolute;
   width: 100%;
   height: 100%;
@@ -257,12 +257,12 @@ body {
 }
 
 .button:disabled {
-  opacity: .9;
+  opacity: 0.9;
   cursor: not-allowed;
 }
 
 .button:disabled:after {
-  opacity: .1;
+  opacity: 0.1;
   background: #707070;
   color: #eeeeee;
 }
@@ -288,20 +288,20 @@ body {
   margin-top: 0;
 }
 
-form:invalid button[class=button] {
-  opacity: .9;
+form:invalid button[class='button'] {
+  opacity: 0.9;
   cursor: not-allowed;
 }
 
-form:invalid button[class=button]:after {
-  opacity: .1;
+form:invalid button[class='button']:after {
+  opacity: 0.1;
 }
 
-form:invalid button[class=button]:active {
+form:invalid button[class='button']:active {
   top: 0px;
 }
 
-form:invalid button[class=button]:active::after {
+form:invalid button[class='button']:active::after {
   top: 4px;
 }
 
@@ -367,7 +367,7 @@ form:invalid button[class=button]:active::after {
   display: block;
   width: 80px;
   height: 50px;
-  content: "";
+  content: '';
   transform: scaleY(1.2);
   z-index: -1;
   margin-bottom: -50px;
@@ -380,28 +380,28 @@ form:invalid button[class=button]:active::after {
 input {
   display: none;
 }
-input[type=radio]:checked + label > span {
+input[type='radio']:checked + label > span {
   color: #fff;
   font-weight: 700;
   text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
 }
-input[type=radio]:checked + label > span::before {
+input[type='radio']:checked + label > span::before {
   background: #f5d100;
   box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.2);
 }
-input[type=radio]:checked + label > span:hover {
+input[type='radio']:checked + label > span:hover {
   background: none;
 }
 
 .winTitle {
-    position: absolute;
-    top: 22%;
-    left: 50%;
-    font-size: 36px;
-    transform: translate(-50%, 0%);
-    text-transform: uppercase;
-    z-index: 1000;
-    color: white;
-    font-family: "Mortal Kombat 3";
-    text-shadow: 2px 2px 2px #cd0e03;
+  position: absolute;
+  top: 22%;
+  left: 50%;
+  font-size: 36px;
+  transform: translate(-50%, 0%);
+  text-transform: uppercase;
+  z-index: 1000;
+  color: white;
+  font-family: 'Mortal Kombat 3';
+  text-shadow: 2px 2px 2px #cd0e03;
 }
