@@ -1,7 +1,5 @@
 import createPlayer from './createPlayer.js'
-import addOnClickRandom from './addOnClickRandom.js'
 import Player from './Player.js'
-import { getRandomizedHit } from './utils.js'
 import addOnSubmitAttack from './addOnSubmitAttack.js'
 
 let socket = io()
