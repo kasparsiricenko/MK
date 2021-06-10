@@ -32,7 +32,12 @@ createPlayer(player1)
 createPlayer(player2)
 
 const onSumbit = () => {
-  console.log('submitted')
+  const $hits = document.getElementsByName('hit')
+  const $defences = document.getElementsByName('defence')
+  const hit = $hits.find(($hit) => $hit.checked)
+  const value = getRandomizedHit(HIT[hit])
+  const defence = $defences.find(($defence) => $defence.checked)
+  const result = { hit, value, defence }s
 }
 
 const $form = document.querySelector('form.control')
@@ -44,7 +49,7 @@ const getRandom = (max) => {
 
 const enemyAttack = () => {
   const hit = ATTACK[getRandom(ATTACK.length)]
-  const value = getRandomizedHit(HIT[hitType])
+  const value = getRandomizedHit(HIT[hit])
   const defence = ATTACK[getRandom(ATTACK.length)]
   return { hit, value, defence }
 }
