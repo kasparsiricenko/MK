@@ -1,6 +1,6 @@
 import createPlayer from './createPlayer.js'
-import addOnClickRandom from './addOnClickRandom.js'
 import Player from './Player.js'
+import addOnSubmitAttack from './addOnSubmitAttack.js'
 
 let socket = io()
 
@@ -23,4 +23,4 @@ const player2 = new Player({
 createPlayer(player1)
 createPlayer(player2)
 
-addOnClickRandom(player1, player2)
+addOnSubmitAttack(player1, player2)

@@ -6,3 +6,7 @@ export const createElement = (element, className) => {
   $element.classList.add(className)
   return $element
 }
+
+export const getRandom = (max) => {
+  return Math.floor(Math.random() * max)
+}
