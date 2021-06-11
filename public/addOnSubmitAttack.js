@@ -16,6 +16,7 @@ const addOnSubmitAttack = (player1, player2) => {
       )
     } else {
       player1.changeHP(player2Attack.value)
+      player1.renderHP()
     }
 
     if (player2Attack.defence === player1Attack.hit) {
@@ -24,13 +25,11 @@ const addOnSubmitAttack = (player1, player2) => {
       )
     } else {
       player2.changeHP(player1Attack.value)
+      player2.renderHP()
     }
 
     const player1Lost = player1.hp <= 0
     const player2Lost = player2.hp <= 0
-
-    player1.renderHP()
-    player2.renderHP()
 
     if (player1Lost && player2Lost) {
       setWinTitle({ isDraw: true })
