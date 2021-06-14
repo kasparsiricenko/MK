@@ -2,7 +2,7 @@ import { getRandom } from './utils.js'
 
 const now = () => '[' + window.dayjs().format('hh:mm:ss.SSS') + ']'
 
-const formatText = (type, options) =>
+const formatText = (type, options = {}) =>
   Object.entries(options).reduce(
     (result, [key, value]) => result.replace(`[${key}]`, value),
     Array.isArray(logs[type])
@@ -62,7 +62,7 @@ const generateLogs = (
     player1,
     player2,
     playerDefence,
-    playerAttack: playerKick,
+    playerAttack,
     playerWins,
     playerLose,
     value,
@@ -84,19 +84,19 @@ const generateLogs = (
     case 'hit': {
       const text = formatText(type, {
         playerDefence: playerDefence.nameUpperCase,
-        playerKick: playerKick.nameUpperCase,
+        playerKick: playerAttack.nameUpperCase,
       })
       return `${now()}: ${text} -${value} [${playerDefence.hp}/100]`
     }
     case 'defence': {
       const text = formatText(type, {
         playerDefence: playerDefence.nameUpperCase,
-        playerKick: playerKick.nameUpperCase,
+        playerKick: playerAttack.nameUpperCase,
       })
       return `${now()}: ${text}`
     }
     case 'draw':
-      return formatText(type, {})
+      return formatText(type)
   }
 }
 
@@ -104,7 +104,6 @@ const $chat = document.getElementsByClassName('chat')[0]
 
 const log = (type, options) => {
   const log = generateLogs(type, options)
-  // console.log(log)
   const $log = document.createElement('p')
   $log.append(log)
   $chat.prepend($log)
