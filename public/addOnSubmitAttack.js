@@ -2,8 +2,11 @@ import setWinTitle from './setWinTitle.js'
 import createReloadButton from './createReloadButton.js'
 import enemyAttack from './enemyAttack.js'
 import playerAttack from './playerAttack.js'
+import log from './log.js'
 
 const addOnSubmitAttack = (player1, player2) => {
+  log('start', { player1, player2 })
+
   const onSumbit = (e) => {
     e.preventDefault()
 
@@ -11,21 +14,27 @@ const addOnSubmitAttack = (player1, player2) => {
     const player2Attack = enemyAttack()
 
     if (player1Attack.defence === player2Attack.hit) {
-      console.log(
-        `${player1.name.toUpperCase()} blocked ${player1Attack.defence.toUpperCase()}`
-      )
+      log('defence', { playerDefence: player1, playerAttack: player2 })
     } else {
       player1.changeHP(player2Attack.value)
       player1.renderHP()
+      log('hit', {
+        playerDefence: player1,
+        playerAttack: player2,
+        value: player2Attack.value,
+      })
     }
 
     if (player2Attack.defence === player1Attack.hit) {
-      console.log(
-        `${player2.name.toUpperCase()} blocked ${player2Attack.defence.toUpperCase()}`
-      )
+      log('defence', { playerDefence: player2, playerAttack: player1 })
     } else {
       player2.changeHP(player1Attack.value)
       player2.renderHP()
+      log('hit', {
+        playerDefence: player2,
+        playerAttack: player1,
+        value: player1Attack.value,
+      })
     }
 
     const player1Lost = player1.hp <= 0
@@ -33,10 +42,13 @@ const addOnSubmitAttack = (player1, player2) => {
 
     if (player1Lost && player2Lost) {
       setWinTitle({ isDraw: true })
+      log('draw')
     } else if (player1Lost) {
       setWinTitle({ name: player2.name })
+      log('end', { playerWins: player2, playerLose: player1 })
     } else if (player2Lost) {
       setWinTitle({ name: player1.name })
+      log('end', { playerWins: player1, playerLose: player2 })
     } else {
       // returns to prevent disable submit button sinse none player win and game is still going..
       return

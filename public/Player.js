@@ -1,6 +1,7 @@
 class Player {
   constructor(props) {
     this.name = props.name
+    this.nameUpperCase = props.name.toUpperCase()
     this.player = props.player
     this.hp = props.hp
     this.img = props.img
