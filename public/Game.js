@@ -21,7 +21,7 @@ const _restart = function () {
 
 const _create = function () {
   const name = this.$nameInput.value
-  if (typeof name !== 'string' || (name.length < 1 && name.length > 16)) {
+  if (typeof name !== 'string' || name.length < 1 || name.length > 16) {
     throw new Error()
   }
   this.name = name.toUpperCase()
