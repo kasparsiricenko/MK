@@ -12,8 +12,42 @@
 
 <body>
   <div class="root">
+    <div class="menu" id="loader">
+      <div class="spinner"></div>
+      <div id="loader-text">Loading...</div>
+    </div>
+    <div class="menu" id="start-menu">
+        <label class="label" for="nickname">
+          NICKNAME
+          <input id="name-input" class="input" name="nickname" type="text" maxlength="16">
+        </label>
+        <button id="create-match-button" class="button">
+          Create Match
+        </button>
+        <button id="join-match-button" class="button">
+          Join Match
+        </button>
+    </div>
+    <div class="menu" id="join-menu">
+      <label class="label" for="passcode">
+        MATCH PASSCODE
+        <input id="join-input" class="input" name="passcode" type="text" maxlength="6">
+      </label>
+      <button id="join-button" class="button">
+        Join
+      </button>
+    </div>
+    <div class="menu" id="waiting-menu">
+      <div class="wrapper">
+        <div class="passcode-label">
+          MATCH PASSCODE
+        </div>
+        <div id="match-passcode"></div>
+        <div class="hint">Hint: Copy paste it to your pal!</div>
+      </div>
+    </div>
     <div class="arenas arena1">
-      <form class="control">
+      <form id="controls" class="control">
         <div class="inputWrap">
           <h2>HIT</h2>
           <div class="ul">
@@ -59,7 +93,7 @@
     <div class="wall-left"></div>
     <div class="wall-right"></div>
   </div>
-  <script src="https://cdn.socket.io/socket.io-1.0.0.js"></script>
+  <script src="https://cdn.socket.io/4.1.2/socket.io.min.js" integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.10.5/dayjs.min.js" integrity="sha512-n6mJ6AqoohFfbgx3x7N162B/zRNs5x8uvsStlHC+LCvqwKW7oiucE07Ehatg62ybx6Vo1ctaZwm/4sSRUTSIQA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="module" src="main.js"></script>
 </body>
