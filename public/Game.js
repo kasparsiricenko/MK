@@ -205,7 +205,7 @@ const _update = function () {
 const _timeUpdate = function () {
   this.timeLeft--
   this.$topCenterWrap.replaceChildren(this.timeLeft)
-  this.this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
 }
 
 const _finish = function () {

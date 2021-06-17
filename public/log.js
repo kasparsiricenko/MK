@@ -1,4 +1,4 @@
-import { getRandom } from './utils.js'
+const getRandom = (max) => Math.floor(Math.random() * max)
 
 const now = () => '[' + window.dayjs().format('hh:mm:ss.SSS') + ']'
 
