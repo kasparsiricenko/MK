@@ -1,3 +1,8 @@
+import log from './log.js'
+import Player from './Player.js'
+import setWinTitle from './setWinTitle.js'
+import { createElement } from './utils.js'
+
 export const Status = {
   Initial: 'initial',
   Started: 'started',
@@ -14,6 +19,13 @@ export const Status = {
   Finished: 'finished',
 }
 
+const createReloadButton = () => {
+  const $reloadButton = createElement('button', 'button')
+  $reloadButton.append('Restart')
+  $reloadButton.addEventListener('click', () => window.location.reload())
+  return $reloadButton
+}
+
 const _restart = function () {
   this.$startMenu.style.display = 'flex'
   return true
@@ -25,7 +37,8 @@ const _create = function () {
     throw new Error()
   }
   this.name = name.toUpperCase()
-  this.socket.emit('create', { name: this.name, character: 'scorpion' })
+  this.character = 'scorpion'
+  this.socket.emit('create', { name: this.name, character: this.character })
   this.socket.on('created', (result) => {
     if (result.ok) {
       this.match = result.createdMatch
@@ -48,9 +61,9 @@ const _waitJoin = function () {
   this.$waitingMenu.style.display = 'flex'
   this.socket.on('opponentJoined', (result) => {
     if (result.ok) {
-      this.enemyPlayer = result.enemyPlayer
+      // debugger
       this.timeout = result.timeout
-      this.play()
+      this.play(result.enemyPlayer)
       this.socket.off('opponentJoined')
     } else {
       throw new Error(result.error)
@@ -83,15 +96,15 @@ const _join = function () {
     throw new Error()
   }
   this.match = { id: matchId }
+  this.character = 'kitana'
   this.socket.emit('join', {
     match: this.match,
-    player: { name: this.name, character: 'scorpion' },
+    player: { name: this.name, character: this.character },
   })
   this.socket.on('joined', (result) => {
     if (result.ok) {
-      this.enemyPlayer = result.enemyPlayer
       this.timeout = result.timeout
-      this.play()
+      this.play(result.enemyPlayer)
       this.socket.off('joined')
     } else {
       throw new Error(result.error)
@@ -101,23 +114,118 @@ const _join = function () {
   return true
 }
 
-const _play = function () {
+const _play = function (enemyPlayer) {
+  this.player = new Player({
+    name: this.name,
+    character: this.character,
+    position: 1,
+  })
+  this.enemyPlayer = new Player({
+    name: enemyPlayer.name,
+    character: enemyPlayer.character,
+    position: 2,
+  })
   this.load(false)
   this.$joinMenu.style.display = 'none'
   this.$waitingMenu.style.display = 'none'
   this.$controls.style.display = 'flex'
   this.timer = setTimeout(() => _update.call(this), this.timeout)
 
+  log('start', { player1: this.player, player2: this.enemyPlayer })
+
+  const onSumbit = (e) => {
+    e.preventDefault()
+
+    this.action = playerAttack()
+    this.socket.emit('action', { action: this.action })
+    this.$attackButton.disabled = true
+  }
+
+  this.$attackButton.onclick = onSumbit
+
+  /**
+   *               ok: true,
+              playerAction: action1Result,
+              enemyAction: action2Result,
+   */
+
+  this.socket.on('actionResult', ({ ok, playerAction, enemyAction, error }) => {
+    if (ok) {
+      if (playerAction.blocked) {
+        log('defence', {
+          playerDefence: this.player,
+          playerAttack: this.enemyPlayer,
+        })
+      } else {
+        this.player.setHp(playerAction.hp)
+        log('hit', {
+          playerDefence: this.player,
+          playerAttack: this.enemyPlayer,
+          value: this.playerAction.value,
+        })
+      }
+
+      if (enemyAction.blocked) {
+        log('defence', {
+          playerDefence: this.enemyPlayer,
+          playerAttack: this.player,
+        })
+      } else {
+        this.enemyPlayer.setHp(enemyAction.hp)
+        log('hit', {
+          playerDefence: this.enemyPlayer,
+          playerAttack: this.player,
+          value: this.enemyAction.value,
+        })
+      }
+      this.action = null
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => _update.call(this), this.timeout)
+    } else {
+      throw Error(error)
+    }
+  })
+
+  this.socket.on('finish', ({ ok }) => {
+    this.finish()
+  })
+
+  this.$topCenterWrap.replaceChildren(this.timeout)
+  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
   return true
 }
 
 const _update = function () {
-  this.timeLeft
+  this.timeLeft = this.timeout
+  this.$topCenterWrap.replaceChildren(this.timeLeft)
+  clearTimeout(this.displayTimer)
   this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
 }
 
 const _timeUpdate = function () {
-  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+  this.timeLeft--
+  this.$topCenterWrap.replaceChildren(this.timeLeft)
+  this.this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+}
+
+const _finish = function () {
+  this.$controls.style.display = 'none'
+  clearTimeout(this.timer)
+  clearTimeout(this.displayTimer)
+  this.$topCenterWrap.replaceChildren(this.$reloadButton)
+  const playerLost = this.player.hp <= 0
+  const enemyPlayerLost = this.enemyPlayer.hp <= 0
+
+  if (playerLost && enemyPlayerLost) {
+    setWinTitle({ isDraw: true })
+    log('draw')
+  } else if (playerLost) {
+    setWinTitle({ name: this.enemyPlayer.nameUpperCase })
+    log('end', { playerWins: this.enemyPlayer, playerLose: this.player })
+  } else if (enemyPlayerLost) {
+    setWinTitle({ name: this.player.nameUpperCase })
+    log('end', { playerWins: this.player, playerLose: this.enemyPlayer })
+  }
 }
 
 class Game {
@@ -138,8 +246,9 @@ class Game {
     this.$waitingMenu = document.getElementById('waiting-menu')
     this.$matchPasscode = document.getElementById('match-passcode')
     this.$attackButton = document.getElementById('attack-button')
-    this.$reloadButton = document.getElementById('reload-button')
+    this.$reloadButton = createReloadButton()
     this.$controls = document.getElementById('controls')
+    this.$topCenterWrap = document.getElementById('top-center-wrap')
     window.GAME = this
     this.$createMatchButton.onclick = (e) => {
       e.preventDefault()
@@ -234,18 +343,18 @@ class Game {
     }
   }
 
-  play() {
+  play(enemyPlayer) {
     switch (this.status) {
       case Status.Joining:
         try {
-          return _play.call(this) && (this.status = Status.Playing)
+          return _play.call(this, enemyPlayer) && (this.status = Status.Playing)
         } catch (error) {
           throw error
         }
 
       case Status.WaitingJoin:
         try {
-          return _play.call(this) && (this.status = Status.Playing)
+          return _play.call(this, enemyPlayer) && (this.status = Status.Playing)
         } catch (error) {
           throw error
         }
@@ -267,9 +376,13 @@ class Game {
 
   finish() {
     switch (this.status) {
-      case Status.Playing: {
-        return (this.status = Status.Finished)
-      }
+      case Status.Playing:
+        try {
+          return _finish.call(this) && (this.status = Status.Finished)
+        } catch (error) {
+          throw error
+        }
+
       default:
         throw Error()
     }
