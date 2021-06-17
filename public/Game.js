@@ -49,6 +49,7 @@ const _waitJoin = function () {
   this.socket.on('opponentJoined', (result) => {
     if (result.ok) {
       this.enemyPlayer = result.enemyPlayer
+      this.timeout = result.timeout
       this.play()
       this.socket.off('opponentJoined')
     } else {
@@ -89,6 +90,7 @@ const _join = function () {
   this.socket.on('joined', (result) => {
     if (result.ok) {
       this.enemyPlayer = result.enemyPlayer
+      this.timeout = result.timeout
       this.play()
       this.socket.off('joined')
     } else {
@@ -104,7 +106,18 @@ const _play = function () {
   this.$joinMenu.style.display = 'none'
   this.$waitingMenu.style.display = 'none'
   this.$controls.style.display = 'flex'
+  this.timer = setTimeout(() => _update.call(this), this.timeout)
+
   return true
+}
+
+const _update = function () {
+  this.timeLeft
+  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+}
+
+const _timeUpdate = function () {
+  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
 }
 
 class Game {
@@ -127,7 +140,6 @@ class Game {
     this.$attackButton = document.getElementById('attack-button')
     this.$reloadButton = document.getElementById('reload-button')
     this.$controls = document.getElementById('controls')
-    this.restart()
     window.GAME = this
     this.$createMatchButton.onclick = (e) => {
       e.preventDefault()
@@ -161,6 +173,10 @@ class Game {
       default:
         throw Error()
     }
+  }
+
+  start() {
+    this.restart()
   }
 
   setJoin() {
@@ -277,3 +293,24 @@ class Game {
 }
 
 export default Game
+
+// const player1 = new Player({
+//   name: 'scorpion',
+//   player: 1,
+//   hp: 100,
+//   img: './assets/scorpion.gif',
+//   weapon: ['vodka'],
+// })
+
+// const player2 = new Player({
+//   name: 'kitana',
+//   player: 2,
+//   hp: 100,
+//   img: './assets/kitana.gif',
+//   weapon: ['whiskey'],
+// })
+
+// createPlayer(player1)
+// createPlayer(player2)
+
+// addOnSubmitAttack(player1, player2)
