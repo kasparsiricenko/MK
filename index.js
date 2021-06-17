@@ -3,9 +3,6 @@ import express from 'express'
 import { Server as SocketIoServer } from 'socket.io'
 import path from 'path'
 import dotenv from 'dotenv'
-import { fileURLToPath } from 'url'
-import { match } from 'assert'
-import { time } from 'console'
 
 dotenv.config()
 const port = process.env.PORT || 8765
@@ -186,9 +183,13 @@ io.on('connection', (socket) => {
             },
             timeout: foundMatch.time,
           })
+
           foundMatch.player.socket.emit('opponentJoined', {
             ok: true,
-            enemyPlayer: player,
+            enemyPlayer: {
+              name: player.name,
+              character: player.character,
+            },
             timeout: foundMatch.time,
           })
         } else {
@@ -240,7 +241,7 @@ io.on('connection', (socket) => {
       attack: action.attack,
       defence: action.defence,
     }
-    socket.emit('joined', {
+    socket.emit('actionAcknowledged', {
       ok: true,
     })
   })
