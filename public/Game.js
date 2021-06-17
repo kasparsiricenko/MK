@@ -136,18 +136,12 @@ const _play = function (enemyPlayer) {
   const onSumbit = (e) => {
     e.preventDefault()
 
-    this.action = playerAttack()
+    this.action = this.playerSubmitAttack()
     this.socket.emit('action', { action: this.action })
     this.$attackButton.disabled = true
   }
 
   this.$attackButton.onclick = onSumbit
-
-  /**
-   *               ok: true,
-              playerAction: action1Result,
-              enemyAction: action2Result,
-   */
 
   this.socket.on('actionResult', ({ ok, playerAction, enemyAction, error }) => {
     if (ok) {
@@ -249,6 +243,8 @@ class Game {
     this.$reloadButton = createReloadButton()
     this.$controls = document.getElementById('controls')
     this.$topCenterWrap = document.getElementById('top-center-wrap')
+    this.$attacks = Array.from(document.getElementsByName('hit'))
+    this.$defences = Array.from(document.getElementsByName('defence'))
     window.GAME = this
     this.$createMatchButton.onclick = (e) => {
       e.preventDefault()
@@ -402,6 +398,15 @@ class Game {
         this.$loader.style.display = 'none'
       }
     }
+  }
+
+  playerSubmitAttack() {
+    const $attack = this.$attacks.find(($attack) => $attack.checked)
+    const attack = $attack.value
+    const $defence = this.$defences.find(($defence) => $defence.checked)
+    const defence = $defence.value
+
+    return { attack, defence }
   }
 }
 
