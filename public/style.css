@@ -173,6 +173,33 @@ body {
   flex-direction: column;
 }
 
+.label-input {
+  font-family: 'Mortal Kombat 3';
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #efefef;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+}
+
+.label-input div {
+  margin-left: 4px
+}
+
+.buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 300px;
+  margin: 0 !important;
+  column-gap: 16px;
+}
+
+.buttons > .button {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .player1 .name {
   left: 5px;
 }
@@ -475,7 +502,7 @@ input[type='radio']:checked + label > span:hover {
   color: #efefef;
   background-color: #00000033;
   text-transform: uppercase;
-  width: 200px;
+  width: 300px;
   height: 60px;
   padding: 0 20px;
 }
@@ -503,12 +530,10 @@ input[type='radio']:checked + label > span:hover {
 .hint {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 23px;
-  font-weight: 500;
+  font-weight: 300;
   color: #50489cb0;
   font-style: italic;
   padding: 24px 12px 0px;
-  text-shadow: #FFFFFF;
-  text-decoration-line: underline;
 }
 
 .state {
