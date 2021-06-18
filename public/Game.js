@@ -1,4 +1,4 @@
-import log from './log.js'
+import log, { now } from './log.js'
 import Player from './Player.js'
 import setWinTitle from './setWinTitle.js'
 import { createElement } from './utils.js'
@@ -145,7 +145,13 @@ const _play = function (enemyPlayer) {
 
   this.socket.on('actionResult', ({ ok, playerAction, enemyAction, error }) => {
     if (ok) {
-      if (playerAction.blocked) {
+      console.log(now(), 'actionResult', {
+        ok,
+        playerAction,
+        enemyAction,
+        error,
+      })
+      if (playerAction.defenceSuccess) {
         log('defence', {
           playerDefence: this.player,
           playerAttack: this.enemyPlayer,
@@ -155,11 +161,11 @@ const _play = function (enemyPlayer) {
         log('hit', {
           playerDefence: this.player,
           playerAttack: this.enemyPlayer,
-          value: this.playerAction.value,
+          value: enemyAction.value,
         })
       }
 
-      if (enemyAction.blocked) {
+      if (enemyAction.defenceSuccess) {
         log('defence', {
           playerDefence: this.enemyPlayer,
           playerAttack: this.player,
@@ -169,14 +175,23 @@ const _play = function (enemyPlayer) {
         log('hit', {
           playerDefence: this.enemyPlayer,
           playerAttack: this.player,
-          value: this.enemyAction.value,
+          value: playerAction.value,
         })
       }
       this.action = null
       clearTimeout(this.timer)
+      this.$attackButton.disabled = false
       this.timer = setTimeout(() => _update.call(this), this.timeout)
     } else {
       throw Error(error)
+    }
+  })
+
+  this.socket.on('actionAcknowledged', ({ ok, error }) => {
+    if (ok) {
+      console.log(now(), 'actionAcknowledged', { ok, error })
+    } else {
+      console.error(error)
     }
   })
 
@@ -245,6 +260,7 @@ class Game {
     this.$topCenterWrap = document.getElementById('top-center-wrap')
     this.$attacks = Array.from(document.getElementsByName('hit'))
     this.$defences = Array.from(document.getElementsByName('defence'))
+    this.$backJoinButton = document.getElementById('back-join-button')
     window.GAME = this
     this.$createMatchButton.onclick = (e) => {
       e.preventDefault()
@@ -258,13 +274,28 @@ class Game {
       e.preventDefault()
       this.join()
     }
+    this.$backJoinButton.onclick = (e) => {
+      e.preventDefault()
+      this.restart({ from: 'fromJoinBackButton' })
+    }
   }
 
-  restart() {
+  restart(props) {
     switch (this.status) {
       case Status.Initial:
         try {
           return _restart.call(this) && (this.status = Status.Started)
+        } catch (error) {
+          throw error
+        }
+
+      case Status.SettingJoin:
+        try {
+          if (props.from === 'fromJoinBackButton') {
+            return _restart.call(this) && (this.status = Status.Started)
+          } else {
+            throw Error()
+          }
         } catch (error) {
           throw error
         }
@@ -411,24 +442,3 @@ class Game {
 }
 
 export default Game
-
-// const player1 = new Player({
-//   name: 'scorpion',
-//   player: 1,
-//   hp: 100,
-//   img: './assets/scorpion.gif',
-//   weapon: ['vodka'],
-// })
-
-// const player2 = new Player({
-//   name: 'kitana',
-//   player: 2,
-//   hp: 100,
-//   img: './assets/kitana.gif',
-//   weapon: ['whiskey'],
-// })
-
-// createPlayer(player1)
-// createPlayer(player2)
-
-// addOnSubmitAttack(player1, player2)
