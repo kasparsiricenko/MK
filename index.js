@@ -11,7 +11,6 @@ const server = createServer(app)
 const io = new SocketIoServer(server)
 
 app.use(express.static('public'))
-
 const matches = []
 const matchesMax = 20
 io.on('connection', (socket) => {
@@ -110,23 +109,26 @@ io.on('connection', (socket) => {
           foundMatch.time = 30000
           foundMatch.update = () => {
             foundMatch.updated = new Date()
+            if (!foundMatch.actions[foundMatch.current]) {
+              foundMatch.actions[foundMatch.current] = {}
+            }
             const action = foundMatch.actions[foundMatch.current]
             const player1 = foundMatch.player
             const player2 = foundMatch.opponent
             const action1 = action[player1.id]
             const action2 = action[player2.id]
-            const action1Blocked =
-              !action2 || (action1 && action2.attack === action1.defence)
-            const action2Blocked =
-              !action1 || (action2 && action1.attack === action2.defence)
+            const action1DefenceSuccess =
+              !action2 || (!!action1 && action2.attack === action1.defence)
+            const action2DefenceSuccess =
+              !action1 || (!!action2 && action1.attack === action2.defence)
 
-            if (action1Blocked === false) {
+            if (action1DefenceSuccess === false) {
               action2.value = getRandomizedHit(damages[action2.attack])
               const newHP = player1.hp - action2.value
               player1.hp = newHP < 0 ? 0 : newHP
             }
 
-            if (action2Blocked === false) {
+            if (action2DefenceSuccess === false) {
               action1.value = getRandomizedHit(damages[action1.attack])
               const newHP = player2.hp - action1.value
               player2.hp = newHP < 0 ? 0 : newHP
@@ -135,14 +137,14 @@ io.on('connection', (socket) => {
             const action1Result = {
               ...action1,
               hasAction: !!action1,
-              blocked: action1Blocked,
+              defenceSuccess: action1DefenceSuccess,
               hp: player1.hp,
             }
 
             const action2Result = {
               ...action2,
               hasAction: !!action2,
-              blocked: action1Blocked,
+              defenceSuccess: action2DefenceSuccess,
               hp: player2.hp,
             }
 
@@ -163,9 +165,11 @@ io.on('connection', (socket) => {
             if (finished) {
               player1.socket.emit('finish', {
                 ok: true,
+                history: foundMatch.actions,
               })
               player2.socket.emit('finish', {
                 ok: true,
+                history: foundMatch.actions,
               })
               clearTimeout(foundMatch.timer)
             } else {
@@ -221,6 +225,11 @@ io.on('connection', (socket) => {
       )
       return socket.disconnect()
     }
+
+    if (!player.match.actions[player.match.current]) {
+      player.match.actions[player.match.current] = {}
+    }
+
     if (player.match.actions[player.match.current][player.id]) {
       socket.emit('actionAcknowledged', { error: '0x11' })
       console.error(
