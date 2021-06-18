@@ -144,12 +144,6 @@ const _play = function (enemyPlayer) {
 
   this.socket.on('actionResult', ({ ok, playerAction, enemyAction, error }) => {
     if (ok) {
-      console.log(now(), 'actionResult', {
-        ok,
-        playerAction,
-        enemyAction,
-        error,
-      })
       if (playerAction.defenceSuccess) {
         log('defence', {
           playerDefence: this.player,
@@ -187,14 +181,12 @@ const _play = function (enemyPlayer) {
 
   this.socket.on('actionAcknowledged', ({ ok, error }) => {
     if (ok) {
-      console.log(now(), 'actionAcknowledged', { ok, error })
     } else {
       console.error(error)
     }
   })
 
   this.socket.on('finish', ({ ok, history }) => {
-    console.log(history)
     this.finish()
   })
   this.timeLeft = this.timeout / 1000 - 1
