@@ -106,7 +106,7 @@ io.on('connection', (socket) => {
           foundMatch.player.state = 'playing'
           foundMatch.player.hp = 100
           foundMatch.opponent.hp = 100
-          foundMatch.time = 30000
+          foundMatch.time = 10000
           foundMatch.update = () => {
             foundMatch.updated = new Date()
             if (!foundMatch.actions[foundMatch.current]) {
