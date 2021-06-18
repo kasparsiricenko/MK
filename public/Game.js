@@ -129,7 +129,6 @@ const _play = function (enemyPlayer) {
   this.$joinMenu.style.display = 'none'
   this.$waitingMenu.style.display = 'none'
   this.$controls.style.display = 'flex'
-  this.timer = setTimeout(() => _update.call(this), this.timeout)
 
   log('start', { player1: this.player, player2: this.enemyPlayer })
 
@@ -179,9 +178,8 @@ const _play = function (enemyPlayer) {
         })
       }
       this.action = null
-      clearTimeout(this.timer)
       this.$attackButton.disabled = false
-      this.timer = setTimeout(() => _update.call(this), this.timeout)
+      _update.call(this)
     } else {
       throw Error(error)
     }
@@ -195,32 +193,32 @@ const _play = function (enemyPlayer) {
     }
   })
 
-  this.socket.on('finish', ({ ok }) => {
+  this.socket.on('finish', ({ ok, history }) => {
+    console.log(history)
     this.finish()
   })
-
-  this.$topCenterWrap.replaceChildren(this.timeout)
-  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+  this.timeLeft = this.timeout / 1000 - 1
+  this.$topCenterWrap.replaceChildren(this.timeLeft)
+  this.timer = setTimeout(() => _timeUpdate.call(this), 1000)
   return true
 }
 
 const _update = function () {
-  this.timeLeft = this.timeout
+  this.timeLeft = this.timeout / 1000
   this.$topCenterWrap.replaceChildren(this.timeLeft)
-  clearTimeout(this.displayTimer)
-  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+  clearTimeout(this.timer)
+  this.timer = setTimeout(() => _timeUpdate.call(this), 1000)
 }
 
 const _timeUpdate = function () {
   this.timeLeft--
   this.$topCenterWrap.replaceChildren(this.timeLeft)
-  this.displayTimer = setTimeout(() => _timeUpdate.call(this), 1000)
+  this.timer = setTimeout(() => _timeUpdate.call(this), 1000)
 }
 
 const _finish = function () {
   this.$controls.style.display = 'none'
   clearTimeout(this.timer)
-  clearTimeout(this.displayTimer)
   this.$topCenterWrap.replaceChildren(this.$reloadButton)
   const playerLost = this.player.hp <= 0
   const enemyPlayerLost = this.enemyPlayer.hp <= 0
