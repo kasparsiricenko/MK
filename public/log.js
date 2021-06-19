@@ -1,6 +1,6 @@
-import { getRandom } from './utils.js'
+const getRandom = (max) => Math.floor(Math.random() * max)
 
-const now = () => '[' + window.dayjs().format('hh:mm:ss.SSS') + ']'
+export const now = () => '[' + window.dayjs().format('hh:mm:ss.SSS') + ']'
 
 const formatText = (type, options = {}) =>
   Object.entries(options).reduce(
